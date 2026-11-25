@@ -1,0 +1,345 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>FIXORA — Campus Intelligence Platform</title>
+   <link rel="stylesheet"
+      href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link
+        href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap"
+        rel="stylesheet">
+</head>
+
+<body>
+    <aside class="sidebar" id="sidebar">
+        <a class="brand" href="#"><span class="logo">F<span>+</span></span><span><b>FIXORA</b><small>Campus
+                    Intelligence</small></span></a>
+        <p class="side-label">WORKSPACE</p>
+        <nav>
+            <button class="nav active" data-view="dashboard">▦ &nbsp; Overview</button>
+            <button class="nav" data-view="complaints">▤ &nbsp; All complaints <i id="navCount">0</i></button>
+            <button class="nav" data-view="report">＋ &nbsp; Report an issue</button>
+            <button class="nav" data-view="analytics">◫ &nbsp; Analytics</button>
+            <button class="nav" data-view="departments">⌘ &nbsp; Departments</button>
+        </nav>
+        <div class="side-bottom">
+            <div class="side-promo"><span>✦</span>
+                <h3>A better campus<br>starts with you.</h3>
+                <p>Every report helps make our campus better.</p><button data-go="report">Report an issue ↗</button>
+            </div>
+            <div class="profile"><span class="avatar">RA</span><span><b>Rihan Al Zahin</b><small>Student
+                        account</small></span><span class="dots">•••</span></div>
+        </div>
+    </aside>
+    <main>
+        <header class="topbar">
+            <div class="top-left"><button id="menuBtn" class="menu">☰</button>
+                <div><small class="crumb">CAMPUS OPERATIONS / <span id="crumb">OVERVIEW</span></small>
+                    <h1 id="pageTitle">Campus overview</h1>
+                </div>
+            </div>
+            <div class="top-actions"><span class="live"><i></i> System operational</span><button class="icon-btn"
+                    id="notifBtn" aria-label="Notifications">♧<i id="notifDot"></i></button><button class="primary"
+                    data-go="report">＋ Report issue</button></div>
+        </header>
+
+        <section class="view active" id="view-dashboard">
+            <div class="welcome">
+                <div><small id="today">CAMPUS PULSE</small>
+                    <h2>Let's make campus <em>better.</em></h2>
+                    <p>Here's what's happening across your campus today.</p>
+                </div>
+                <div class="decor">✳</div>
+            </div>
+            <div class="stats">
+                <article class="stat">
+                    <div class="stat-head">Total reports <span class="ico purple">▤</span></div><strong
+                        id="total">0</strong><small>All campus reports</small>
+                </article>
+                <article class="stat">
+                    <div class="stat-head">Awaiting action <span class="ico orange">◷</span></div><strong
+                        id="pending">0</strong><small>Pending or assigned</small>
+                </article>
+                <article class="stat">
+                    <div class="stat-head">In progress <span class="ico blue">↻</span></div><strong
+                        id="progress">0</strong><small>Being worked on</small>
+                </article>
+                <article class="stat">
+                    <div class="stat-head">Resolved <span class="ico green">✓</span></div><strong
+                        id="resolved">0</strong><small id="rateFoot">Resolution rate</small>
+                </article>
+            </div>
+            <div class="two-col">
+                <article class="panel">
+                    <div class="panel-title">
+                        <div><small>LIVE OVERVIEW</small>
+                            <h3>Resolution performance</h3>
+                        </div><span class="pill">All time ⌄</span>
+                    </div>
+                    <div class="chart">
+                        <div id="donut" class="donut">
+                            <div><b id="rate">0%</b><small>resolved</small></div>
+                        </div>
+                        <div id="legend" class="legend"></div>
+                    </div>
+                    <div class="chart-foot">● <span id="chartFoot">Tracking campus resolution in real time.</span></div>
+                </article>
+                <article class="panel">
+                    <div class="panel-title">
+                        <div><small>NEEDS ATTENTION</small>
+                            <h3>Priority queue</h3>
+                        </div><button class="link" data-go="complaints">View all ↗</button>
+                    </div>
+                    <div id="priorityList" class="priority-list"></div>
+                </article>
+            </div>
+            <article class="panel">
+                <div class="panel-title">
+                    <div><small>CAMPUS PULSE</small>
+                        <h3>Recent reports</h3>
+                    </div><button class="link" data-go="complaints">Explore reports ↗</button>
+                </div>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Issue</th>
+                                <th>Location</th>
+                                <th>Department</th>
+                                <th>Priority</th>
+                                <th>Status</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody id="recentRows"></tbody>
+                    </table>
+                </div>
+            </article>
+        </section>
+
+        <section class="view" id="view-complaints">
+            <div class="section-head">
+                <div><small>CAMPUS PULSE</small>
+                    <h2>All complaints</h2>
+                    <p>Find reports, track progress, and see which team is responsible.</p>
+                </div><button class="primary" data-go="report">＋ New report</button>
+            </div>
+            <div class="filters panel"><input id="search" placeholder="⌕  Search title, ID, or location…"><select
+                    id="filterStatus">
+                    <option value="">All statuses</option>
+                    <option>Pending</option>
+                    <option>Assigned</option>
+                    <option>In Progress</option>
+                    <option>Resolved</option>
+                    <option>Closed</option>
+                </select><select id="filterCategory">
+                    <option value="">All categories</option>
+                    <option>Electrical</option>
+                    <option>Plumbing</option>
+                    <option>Wi-Fi / Network</option>
+                    <option>Cleaning</option>
+                    <option>Furniture</option>
+                    <option>AC / Cooling</option>
+                    <option>Classroom Equipment</option>
+                    <option>Security</option>
+                    <option>Laboratory</option>
+                    <option>Library</option>
+                    <option>Other</option>
+                </select><select id="filterPriority">
+                    <option value="">All priorities</option>
+                    <option>Critical</option>
+                    <option>High</option>
+                    <option>Medium</option>
+                    <option>Low</option>
+                </select><button class="secondary" id="resetFilters">Reset</button></div>
+            <div class="results"><span id="resultCount">0 reports</span><span>● Anonymous reports hide reporter identity
+                    in public views</span></div>
+            <article class="panel table-panel">
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Report</th>
+                                <th>Category / Location</th>
+                                <th>Assigned team</th>
+                                <th>Priority</th>
+                                <th>Status</th>
+                                <th>Reported</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="complaintRows"></tbody>
+                    </table>
+                </div>
+                <div id="empty" class="empty hidden">
+                    <h3>No matching reports</h3>
+                    <p>Try changing your filters or submit a new report.</p><button class="secondary"
+                        id="emptyReset">Clear filters</button>
+                </div>
+            </article>
+        </section>
+
+        <section class="view" id="view-report">
+            <div class="section-head">
+                <div><small>MAKE A DIFFERENCE</small>
+                    <h2>Report a campus issue</h2>
+                    <p>Tell us what's wrong. FIXORA will route it to the right team.</p>
+                </div><span class="secure">♧ Secure reporting</span>
+            </div>
+            <div class="report-layout">
+                <form class="panel form" id="reportForm">
+                    <div class="form-title"><span>01</span>
+                        <div>
+                            <h3>Issue details</h3>
+                            <p>Give us enough information to take action.</p>
+                        </div>
+                    </div>
+                    <label for="title">Issue title <b>*</b></label><input id="title" required maxlength="90"
+                        placeholder="e.g. Projector not working in Room 402">
+                    <div class="form-row">
+                        <div><label for="category">Category <b>*</b></label><select id="category" required>
+                                <option value="">Select category</option>
+                                <option>Electrical</option>
+                                <option>Plumbing</option>
+                                <option>Wi-Fi / Network</option>
+                                <option>Cleaning</option>
+                                <option>Furniture</option>
+                                <option>AC / Cooling</option>
+                                <option>Classroom Equipment</option>
+                                <option>Security</option>
+                                <option>Laboratory</option>
+                                <option>Library</option>
+                                <option>Other</option>
+                            </select></div>
+                        <div><label for="priority">Priority <b>*</b></label><select id="priority">
+                                <option>Medium</option>
+                                <option>Low</option>
+                                <option>High</option>
+                                <option>Critical</option>
+                            </select></div>
+                    </div>
+                    <label for="location">Campus location <b>*</b></label><input id="location" required maxlength="100"
+                        placeholder="e.g. Building 2, Room 402">
+                    <label for="description">Description <b>*</b></label><textarea id="description" required
+                        minlength="10" maxlength="1200" rows="5"
+                        placeholder="Describe the issue and anything that may help…"></textarea>
+                    <div class="char-count"><span>Be clear and specific to help the team respond faster.</span><span
+                            id="charCount">0 / 1200</span></div>
+                    <div class="anonymous"><span class="anon-icon">◉</span>
+                        <div><b>Submit anonymously</b>
+                            <p>Your name won't appear in public views. Admins can still manage the report securely.</p>
+                        </div><label class="switch"><input id="anonymous" type="checkbox"><span></span></label>
+                    </div>
+                    <div class="form-actions"><button type="button" class="secondary" id="cancel">Cancel</button><button
+                            type="submit" class="primary">↗ Submit report</button></div>
+                </form>
+                <aside class="report-aside">
+                    <article class="panel route-card"><span class="route-icon">⌘</span><small>SMART ROUTING</small>
+                        <h3>The right team.<br><em>Automatically.</em></h3>
+                        <p>Based on your category, FIXORA identifies the responsible campus department.</p>
+                        <div class="route-preview"><span>↳</span>
+                            <div><small>YOUR REPORT GOES TO</small><b id="routeDept">Select a category</b><small
+                                    id="routeContact">Department contact appears here</small></div>
+                        </div>
+                    </article>
+                    <article class="panel tips">
+                        <h3>Helpful reporting tips</h3>
+                        <p><b>01</b> Choose the closest matching category.</p>
+                        <p><b>02</b> Add a precise building, floor, or room.</p>
+                        <p><b>03</b> Use Critical for urgent safety or major disruptions.</p>
+                    </article>
+                    <p class="privacy">♧ &nbsp; <span><b>Your privacy matters.</b><br>Anonymous reports hide your
+                            identity from public listings.</span></p>
+                </aside>
+            </div>
+        </section>
+
+        <section class="view" id="view-analytics">
+            <div class="section-head">
+                <div><small>DATA & INSIGHTS</small>
+                    <h2>Campus analytics</h2>
+                    <p>Understand recurring issues and measure response performance.</p>
+                </div><button class="secondary" id="export">↓ Export CSV</button>
+            </div>
+            <div class="stats">
+                <article class="stat">
+                    <div class="stat-head">Resolution rate <span class="ico green">✓</span></div><strong
+                        id="aRate">0%</strong><small>Resolved out of all reports</small>
+                </article>
+                <article class="stat">
+                    <div class="stat-head">Open reports <span class="ico orange">◷</span></div><strong
+                        id="aOpen">0</strong><small>Need follow-up</small>
+                </article>
+                <article class="stat">
+                    <div class="stat-head">Critical / High <span class="ico red">!</span></div><strong
+                        id="aUrgent">0</strong><small>Priority attention</small>
+                </article>
+                <article class="stat">
+                    <div class="stat-head">Departments <span class="ico blue">⌘</span></div><strong
+                        id="aDepartments">0</strong><small>Teams receiving reports</small>
+                </article>
+            </div>
+            <div class="two-col">
+                <article class="panel">
+                    <div class="panel-title">
+                        <div><small>DISTRIBUTION</small>
+                            <h3>Reports by category</h3>
+                        </div>
+                    </div>
+                    <div id="categoryBars" class="bars"></div>
+                </article>
+                <article class="panel">
+                    <div class="panel-title">
+                        <div><small>OPERATIONS</small>
+                            <h3>Reports by department</h3>
+                        </div>
+                    </div>
+                    <div id="departmentBars" class="bars"></div>
+                </article>
+            </div>
+            <p class="footnote">Analytics use data stored in this browser. Shared dashboards require a backend and
+                central database.</p>
+        </section>
+
+        <section class="view" id="view-departments">
+            <div class="section-head">
+                <div><small>CAMPUS DIRECTORY</small>
+                    <h2>Departments & routing</h2>
+                    <p>See how FIXORA maps issue categories to the responsible team.</p>
+                </div>
+            </div>
+            <div id="departmentCards" class="department-grid"></div>
+            <article class="panel how-route"><span class="route-icon">✦</span>
+                <div>
+                    <h3>How smart routing works</h3>
+                    <p>When a report is submitted, FIXORA looks up its category, assigns the mapped department, and
+                        creates an in-app notification. This demo simulates routing locally; real staff notifications
+                        need a backend.</p>
+                </div>
+            </article>
+        </section>
+        <footer><span>© 2026 FIXORA</span><span>● Built for a smarter campus</span><span>Beyond issues. Into
+                solutions.</span></footer>
+    </main>
+    <div id="toastRegion" class="toast-region" aria-live="polite"></div>
+    <div id="modalBackdrop" class="backdrop hidden">
+        <section class="modal panel" role="dialog" aria-modal="true">
+            <div class="modal-head">
+                <div><small>REPORT DETAILS</small>
+                    <h2 id="modalTitle">Issue details</h2>
+                </div><button id="closeModal" class="icon-btn">×</button>
+            </div>
+            <div id="modalContent"></div>
+        </section>
+    </div>
+    <div id="notifications" class="notifications hidden">
+        <div class="notif-head"><b>Notifications</b><button class="link" id="markRead">Mark read</button></div>
+        <div id="notifList"></div>
+    </div>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+
+</html>
